@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<select name="province" id="province">
+			<option>省</option>
+		</select>
+		<select name="city" id="city">
+			<option>市</option>
+		</select>
+		<select name="area" id="area">
+			<option>县/区</option>
+		</select>
+		<button>提交</button>
+	</head>
+	<body>	
+		<script src="./jquery.min.js"></script>
+		<script src="city.js"></script>
+		<script>
+			let selectCity ={
+				province: '',
+				city: '',
+				area: ''
+			}
+			for (const province in cities) {
+				let el_opt = $(`<option value="${province}">${province}</option>`)
+				$('#province').append(el_opt)
+			}
+			$('#province').change(function(e){
+				selectCity.city = '';
+				selectCity.area = '';
+				$('#city').html('<option>市</option>')
+				$('#area').html('<option>县/区</option>')
+				console.log(e)
+				console.log(e.target.value)
+				selectCity.province = e.target.value
+				for (const city in cities[selectCity.province]) {
+					let el_opt = $(`<option value="${city}">${city}</option>`)
+					$('#city').append(el_opt)
+				}
+			})
+			
+			$('#city').change(function(e){
+				selectCity.area = '';
+				$('#area').html('<option>县/区</option>')
+				console.log(e)
+				console.log(e.target.value)
+				selectCity.city = e.target.value
+				for (const area of cities[selectCity.province][selectCity.city]) {
+					let el_opt = $(`<option value="${area}">${area}</option>`)
+					$('#area').append(el_opt)
+				}
+			})
+
+			$('#area').change(function(e){
+				selectCity.area = e.target.value;
+			})
+
+			$('button').click(function(){
+				console.log(selectCity)
+				if(selectCity.area == '县/区' || selectCity.area == ''){
+					console.log('请填写完整地址')
+				}
+			})
+		</script>
+	</body>
+</html>
